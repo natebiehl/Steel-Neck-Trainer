@@ -70,6 +70,33 @@
   }
   @media (min-width:1024px) { .screen { max-width:1100px; } }
 
+  /* iPhone landscape: short viewport, wider than tall */
+  @media (max-height:500px) and (orientation:landscape) {
+    header { padding:6px 14px; }
+    header h1 { font-size:18px; }
+    header span { display:none; }
+    .tab { padding:7px 4px; font-size:8px; }
+    .screen { padding:6px 10px; gap:6px; }
+    .screen.active { flex-direction:row; flex-wrap:wrap; align-items:flex-start; gap:8px; }
+    .screen.active > .stats-row,
+    .screen.active > .score-streak,
+    .screen.active > .feedback,
+    .screen.active > .nfc-prompt { width:100%; }
+    .screen.active > .neck-wrap { flex:2 1 0; min-width:0; }
+    .screen.active > .answer-grid-wrap { flex:1 1 120px; min-width:100px; }
+    .screen.active > .btn { flex:1 1 100px; }
+    .stats-row { gap:4px; }
+    .stat-box { padding:4px 6px; }
+    .stat-val { font-size:18px; }
+    .stat-lbl { font-size:8px; }
+    .score-streak { display:none; }
+    .nfc-prompt { font-size:9px; margin:0; }
+    .feedback { height:14px; font-size:9px; }
+    .answer-btn { font-size:12px; padding:8px 2px; }
+    .answer-row-label { font-size:8px; }
+    .btn { font-size:9px; padding:8px; }
+  }
+
   .neck-wrap { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; background:var(--panel); border:1px solid var(--border); border-radius:4px; padding:8px 0; }
   canvas { display:block; }
 
@@ -271,6 +298,14 @@
         <label>Show intervals on neck</label>
         <label class="toggle"><input type="checkbox" id="cfg-intervals" onchange="redrawCurrentNeck()"><span class="toggle-slider"></span></label>
       </div>
+      <div class="cfg-row">
+        <label>Highlight key tones</label>
+        <label class="toggle"><input type="checkbox" id="cfg-highlight-key" onchange="redrawCurrentNeck()"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="cfg-row">
+        <label>Drill key tones only</label>
+        <label class="toggle"><input type="checkbox" id="cfg-key-only" onchange="onKeyOnlyChange()"><span class="toggle-slider"></span></label>
+      </div>
     </div>
     <button class="btn danger" onclick="resetStats()">Reset All Stats</button>
   </div>
@@ -449,6 +484,7 @@ function setDisplayMode(mode) {
 
 function onKeyChange() {
   updateHeaderMode();
+  buildPool(); buildNfcPool();
   newNfcCard();
   newCard();
   if (activeTab === 'ref') drawRefNeck();
@@ -549,11 +585,16 @@ function srWeight(s, f) {
 function randomFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
 // ─── POOL ─────────────────────────────────────────────────────────────────────
+function onKeyOnlyChange() { buildPool(); buildNfcPool(); newNfcCard(); newCard(); }
+
 function buildPoolFromRange() {
   const {min, max} = getFretRange();
+  const keyOnly = document.getElementById('cfg-key-only') && document.getElementById('cfg-key-only').checked;
+  const diatonic = new Set(getDiatonicNotes());
   const pool = [];
   for (let s = 0; s < 10; s++)
     for (let f = min; f <= max; f++) {
+      if (keyOnly && !diatonic.has(noteAt(s, f))) continue;
       const w = srWeight(s, f);
       for (let i = 0; i < w; i++) pool.push({s, f});
     }
@@ -605,14 +646,14 @@ function setFeedback(prefix, msg, wrong) {
 function clearFeedback(prefix) { setFeedback(prefix, '', false); }
 
 // ─── NECK DRAWING ─────────────────────────────────────────────────────────────
-const ROW_H=26, LEFT_PAD=30, TOP_PAD=26, BOTTOM_PAD=10;
+const ROW_H=26, LEFT_PAD=52, TOP_PAD=26, BOTTOM_PAD=10;
 
 function getNeckDims(canvas, range) {
   const {min, max} = range;
   const fretCount  = max - min + 1;
   const available  = canvas.parentElement.offsetWidth || 340;
   const maxColW    = fretCount === 1 ? 80 : available;
-  const COL_W      = Math.min(maxColW, Math.max(26, Math.floor((available - 36) / fretCount)));
+  const COL_W      = Math.min(maxColW, Math.max(26, Math.floor((available - LEFT_PAD - 10) / fretCount)));
   canvas.width     = LEFT_PAD + fretCount * COL_W + 6;
   canvas.height    = TOP_PAD + 10 * ROW_H + BOTTOM_PAD;
   return {COL_W, fretCount, fretMin:min};
@@ -649,9 +690,9 @@ function drawNeck(canvas, highlights, interactive, onTap, range) {
     const y = TOP_PAD + s * ROW_H + ROW_H / 2;
     ctx.strokeStyle = '#5a8a7a';
     ctx.lineWidth   = 1 + (s > 6 ? 0.4 : 0);
-    ctx.beginPath(); ctx.moveTo(LEFT_PAD, y); ctx.lineTo(W - 4, y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(LEFT_PAD + 10, y); ctx.lineTo(W - 4, y); ctx.stroke();
     ctx.fillStyle = '#ccc'; ctx.font = '9px IBM Plex Mono'; ctx.textAlign = 'right';
-    ctx.fillText('S' + (s + 1), LEFT_PAD - 4, y + 3);
+    ctx.fillText('S' + (s + 1), LEFT_PAD - 10, y + 3);
   }
 
   for (let i = 0; i <= fretCount; i++) {
@@ -663,20 +704,44 @@ function drawNeck(canvas, highlights, interactive, onTap, range) {
     ctx.beginPath(); ctx.moveTo(x, TOP_PAD - 4); ctx.lineTo(x, TOP_PAD + 10 * ROW_H - 4); ctx.stroke();
   }
 
-  // Interval overlay
-  const showIntervals = document.getElementById('cfg-intervals') && document.getElementById('cfg-intervals').checked;
-  if (showIntervals) {
-    const root = NOTE_NAMES.indexOf(getKeyRoot());
+  // Key tone highlight boxes
+  const showKeyHL = document.getElementById('cfg-highlight-key') && document.getElementById('cfg-highlight-key').checked;
+  if (showKeyHL) {
+    const diatonic  = new Set(getDiatonicNotes());
+    const triadDegs = new Set([0, 4, 7]); // root, major 3rd, 5th intervals
+    const rootIdx   = NOTE_NAMES.indexOf(getKeyRoot());
     for (let s = 0; s < 10; s++) {
       for (let i = 0; i < fretCount; i++) {
         const f   = fretMin + i;
         const n   = NOTE_NAMES[(NOTE_NAMES.indexOf(OPEN_NOTES[s]) + f) % 12];
+        if (!diatonic.has(n)) continue;
+        const deg = (NOTE_NAMES.indexOf(n) - rootIdx + 12) % 12;
+        const isTriad = triadDegs.has(deg);
+        const x = LEFT_PAD + i * COL_W;
+        const y = TOP_PAD + s * ROW_H + ROW_H / 2;
+        ctx.fillStyle = isTriad ? 'rgba(200,168,75,0.45)' : 'rgba(255,255,255,0.18)';
+        ctx.fillRect(x - 7, y - 7, 14, 14);
+      }
+    }
+  }
+
+  // Interval overlay
+  const showIntervals = document.getElementById('cfg-intervals') && document.getElementById('cfg-intervals').checked;
+  const keyOnly       = document.getElementById('cfg-key-only') && document.getElementById('cfg-key-only').checked;
+  if (showIntervals) {
+    const root     = NOTE_NAMES.indexOf(getKeyRoot());
+    const diatonic = new Set(getDiatonicNotes());
+    for (let s = 0; s < 10; s++) {
+      for (let i = 0; i < fretCount; i++) {
+        const f = fretMin + i;
+        const n = NOTE_NAMES[(NOTE_NAMES.indexOf(OPEN_NOTES[s]) + f) % 12];
+        if (keyOnly && !diatonic.has(n)) continue;
         const deg = DEGREE_NAMES[(NOTE_NAMES.indexOf(n) - root + 12) % 12];
         const x   = LEFT_PAD + i * COL_W;
         const y   = TOP_PAD + s * ROW_H + ROW_H / 2;
         ctx.beginPath(); ctx.arc(x, y, 12, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(255,255,255,0.15)'; ctx.fill();
-        ctx.fillStyle = 'rgba(255,255,255,0.75)';
+        ctx.fillStyle = 'rgba(255,255,255,0.85)';
         ctx.font = 'bold 11px IBM Plex Mono';
         ctx.textAlign = 'center';
         ctx.fillText(deg, x, y + 4);
@@ -777,7 +842,8 @@ function buildKeyOrderedGrid(containerId, correctRaw, onAnswer) {
   }
 
   makeRow(diatonic,    'Key tones');
-  makeRow(accidentals, 'Accidentals');
+  const keyOnly = document.getElementById('cfg-key-only') && document.getElementById('cfg-key-only').checked;
+  if (!keyOnly) makeRow(accidentals, 'Accidentals');
 }
 
 function redrawCurrentNeck() {
