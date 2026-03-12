@@ -267,6 +267,10 @@
         <label>Play tone on new note</label>
         <label class="toggle"><input type="checkbox" id="cfg-tone" checked><span class="toggle-slider"></span></label>
       </div>
+      <div class="cfg-row">
+        <label>Show intervals on neck</label>
+        <label class="toggle"><input type="checkbox" id="cfg-intervals" onchange="redrawCurrentNeck()"><span class="toggle-slider"></span></label>
+      </div>
     </div>
     <button class="btn danger" onclick="resetStats()">Reset All Stats</button>
   </div>
@@ -633,9 +637,9 @@ function drawNeck(canvas, highlights, interactive, onTap, range) {
 
   for (let i = 0; i < fretCount; i++) {
     const f     = fretMin + i;
-    const x     = LEFT_PAD + i * COL_W + COL_W / 2;
+    const x     = LEFT_PAD + i * COL_W;
     const color = FRET_COLORS[f];
-    ctx.fillStyle = color || (f === 12 ? '#888' : '#3a3a3a');
+    ctx.fillStyle = color || (f === 12 ? '#bbb' : '#777');
     ctx.font      = (color ? 'bold ' : '') + '9px IBM Plex Mono';
     ctx.textAlign = 'center';
     ctx.fillText(f === 0 ? 'O' : f, x, 16);
@@ -643,10 +647,10 @@ function drawNeck(canvas, highlights, interactive, onTap, range) {
 
   for (let s = 0; s < 10; s++) {
     const y = TOP_PAD + s * ROW_H + ROW_H / 2;
-    ctx.strokeStyle = '#252525';
+    ctx.strokeStyle = '#5a8a7a';
     ctx.lineWidth   = 1 + (s > 6 ? 0.4 : 0);
     ctx.beginPath(); ctx.moveTo(LEFT_PAD, y); ctx.lineTo(W - 4, y); ctx.stroke();
-    ctx.fillStyle = '#aaa'; ctx.font = '9px IBM Plex Mono'; ctx.textAlign = 'right';
+    ctx.fillStyle = '#ccc'; ctx.font = '9px IBM Plex Mono'; ctx.textAlign = 'right';
     ctx.fillText('S' + (s + 1), LEFT_PAD - 4, y + 3);
   }
 
@@ -654,19 +658,40 @@ function drawNeck(canvas, highlights, interactive, onTap, range) {
     const f     = fretMin + i;
     const x     = LEFT_PAD + i * COL_W;
     const color = FRET_COLORS[f];
-    ctx.strokeStyle = color ? color + '88' : (f === 0 && fretMin === 0 ? '#555' : '#1e1e1e');
+    ctx.strokeStyle = color ? color + 'bb' : (f === 0 && fretMin === 0 ? '#888' : '#7a6a3a');
     ctx.lineWidth   = (color || (f === 0 && fretMin === 0)) ? 2 : 1;
     ctx.beginPath(); ctx.moveTo(x, TOP_PAD - 4); ctx.lineTo(x, TOP_PAD + 10 * ROW_H - 4); ctx.stroke();
   }
 
+  // Interval overlay
+  const showIntervals = document.getElementById('cfg-intervals') && document.getElementById('cfg-intervals').checked;
+  if (showIntervals) {
+    const root = NOTE_NAMES.indexOf(getKeyRoot());
+    for (let s = 0; s < 10; s++) {
+      for (let i = 0; i < fretCount; i++) {
+        const f   = fretMin + i;
+        const n   = NOTE_NAMES[(NOTE_NAMES.indexOf(OPEN_NOTES[s]) + f) % 12];
+        const deg = DEGREE_NAMES[(NOTE_NAMES.indexOf(n) - root + 12) % 12];
+        const x   = LEFT_PAD + i * COL_W;
+        const y   = TOP_PAD + s * ROW_H + ROW_H / 2;
+        ctx.beginPath(); ctx.arc(x, y, 12, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.15)'; ctx.fill();
+        ctx.fillStyle = 'rgba(255,255,255,0.75)';
+        ctx.font = 'bold 11px IBM Plex Mono';
+        ctx.textAlign = 'center';
+        ctx.fillText(deg, x, y + 4);
+      }
+    }
+  }
+
   (highlights || []).forEach(h => {
     if (h.f < fretMin || h.f >= fretMin + fretCount) return;
-    const x = LEFT_PAD + (h.f - fretMin) * COL_W + COL_W / 2;
+    const x = LEFT_PAD + (h.f - fretMin) * COL_W;
     const y = TOP_PAD + h.s * ROW_H + ROW_H / 2;
-    ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI * 2);
+    ctx.beginPath(); ctx.arc(x, y, 12, 0, Math.PI * 2);
     ctx.fillStyle = h.color || '#c8a84b'; ctx.fill();
     if (h.label) {
-      ctx.fillStyle = '#000'; ctx.font = 'bold 8px IBM Plex Mono'; ctx.textAlign = 'center';
+      ctx.fillStyle = '#000'; ctx.font = 'bold 9px IBM Plex Mono'; ctx.textAlign = 'center';
       ctx.fillText(h.label, x, y + 3);
     }
   });
@@ -755,7 +780,12 @@ function buildKeyOrderedGrid(containerId, correctRaw, onAnswer) {
   makeRow(accidentals, 'Accidentals');
 }
 
-// ─── NECK FLASHCARD ───────────────────────────────────────────────────────────
+function redrawCurrentNeck() {
+  if (activeTab === 'neckfc' && nfcCard) drawNfcNeck(false);
+  if (activeTab === 'ref')              drawRefNeck();
+}
+
+
 let nfcCard = null;
 
 function newNfcCard() {
@@ -783,7 +813,7 @@ function revealNfcCard() {
 function drawNfcNeck(revealed) {
   const canvas = document.getElementById('nfc-canvas');
   drawNeck(canvas,
-    [{s:nfcCard.s, f:nfcCard.f, color:revealed?'#7fbfb0':'#c8a84b', label:revealed?displayLabel(nfcCard.s,nfcCard.f):'?'}],
+    [{s:nfcCard.s, f:nfcCard.f, color:revealed?'#7fbfb0':'#c8a84b', label:revealed?displayLabel(nfcCard.s,nfcCard.f):null}],
     false, null, getFretRange());
 }
 
