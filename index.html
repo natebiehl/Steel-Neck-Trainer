@@ -10,154 +10,87 @@
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;600&display=swap');
 
   :root {
-    --bg: #0e0e0e;
-    --panel: #161616;
-    --border: #2a2a2a;
-    --accent: #c8a84b;
-    --accent2: #7fbfb0;
-    --wrong: #c85c5c;
-    --text: #e8e4da;
-    --muted: #666;
-    --fret-yellow: #d4b800;
-    --fret-red: #c84040;
-    --fret-blue: #4466cc;
-    --fret-teal: #2a9d8f;
+    --bg:#0e0e0e; --panel:#161616; --border:#2a2a2a;
+    --accent:#c8a84b; --accent2:#7fbfb0; --wrong:#c85c5c;
+    --text:#e8e4da; --muted:#666;
+    --fret-yellow:#d4b800; --fret-red:#c84040; --fret-blue:#4466cc; --fret-teal:#2a9d8f;
   }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'IBM Plex Mono',monospace; min-height:100vh; display:flex; flex-direction:column; align-items:center; overflow-x:hidden; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  header { width:100%; padding:14px 20px 10px; border-bottom:1px solid var(--border); display:flex; align-items:baseline; gap:12px; }
+  header h1 { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:3px; color:var(--accent); }
+  header span { font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'IBM Plex Mono', monospace;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow-x: hidden;
+  .tab-bar { width:100%; display:flex; border-bottom:1px solid var(--border); overflow-x:auto; }
+  .tab { flex:1; min-width:44px; padding:11px 4px; text-align:center; font-size:9px; letter-spacing:.8px; text-transform:uppercase; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; transition:color .2s,border-color .2s; }
+  .tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+  .screen { display:none; width:100%; padding:14px; max-width:500px; }
+  .screen.active { display:flex; flex-direction:column; gap:14px; }
+
+  @media (min-width:700px) and (max-width:819px) {
+    header { padding:16px 24px 12px; } header h1 { font-size:28px; }
+    .tab { font-size:10px; padding:12px 6px; }
+    .screen { max-width:680px; padding:16px 20px; }
+    .answer-btn { font-size:16px; padding:15px 4px; }
+    .note-select-btn { font-size:15px; padding:13px 4px; }
+    .card-main { font-size:60px; } .theory-triad { font-size:72px; }
+    .triad-question { font-size:52px; } .stat-val { font-size:30px; }
+    .stat-box { padding:12px; } .btn { font-size:12px; padding:13px; }
   }
-
-  header {
-    width: 100%;
-    padding: 14px 20px 10px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-  }
-  header h1 { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 3px; color: var(--accent); }
-  header span { font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
-
-  .tab-bar { width: 100%; display: flex; border-bottom: 1px solid var(--border); overflow-x: auto; }
-  .tab {
-    flex: 1; min-width: 48px;
-    padding: 11px 4px;
-    text-align: center; font-size: 9px; letter-spacing: .8px; text-transform: uppercase;
-    color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent;
-    white-space: nowrap; transition: all 0.2s;
-  }
-  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
-  .screen { display: none; width: 100%; padding: 14px; max-width: 500px; }
-  .screen.active { display: flex; flex-direction: column; gap: 14px; }
-
-  /* iPad mini portrait: 768px — single column but scaled up */
-  @media (min-width: 700px) and (max-width: 819px) {
-    header { padding: 16px 24px 12px; }
-    header h1 { font-size: 28px; }
-    .tab { font-size: 10px; padding: 12px 6px; letter-spacing: 1px; }
-    .screen { max-width: 680px; padding: 16px 20px; }
-    .screen.active { flex-direction: column; gap: 14px; }
-    .answer-btn { font-size: 16px; padding: 15px 4px; }
-    .note-select-btn { font-size: 15px; padding: 13px 4px; }
-    .card-main { font-size: 60px; }
-    .theory-triad { font-size: 72px; }
-    .triad-question { font-size: 52px; }
-    .stat-val { font-size: 30px; }
-    .stat-box { padding: 12px; }
-    .btn { font-size: 12px; padding: 13px; }
-  }
-
-  /* iPad / iPad Air / iPad mini landscape and larger: two-column */
-  @media (min-width: 820px) {
-    header { padding: 18px 32px 14px; }
-    header h1 { font-size: 32px; }
-    .tab { font-size: 11px; padding: 13px 8px; letter-spacing: 1.5px; }
-    .screen { max-width: 900px; padding: 20px 28px; }
-    .screen.active { flex-direction: row; flex-wrap: wrap; align-items: flex-start; gap: 20px; }
-    .screen.active > .stats-row { width: 100%; }
-    .screen.active > .score-streak { width: 100%; }
+  @media (min-width:820px) {
+    header { padding:18px 32px 14px; } header h1 { font-size:32px; }
+    .tab { font-size:11px; padding:13px 8px; letter-spacing:1.5px; }
+    .screen { max-width:900px; padding:20px 28px; }
+    .screen.active { flex-direction:row; flex-wrap:wrap; align-items:flex-start; gap:20px; }
+    .screen.active > .stats-row,
+    .screen.active > .score-streak,
+    .screen.active > .feedback,
+    .screen.active > .nfc-prompt,
+    .screen.active > .type-toggle,
+    .screen.active > #triad-drill-view,
+    .screen.active > #triad-ref-view,
+    .screen.active > .section-label { width:100%; }
     .screen.active > .card,
-    .screen.active > .theory-card { flex: 1 1 300px; }
-    .screen.active > .neck-wrap { flex: 2 1 420px; }
+    .screen.active > .theory-card { flex:1 1 300px; }
+    .screen.active > .neck-wrap { flex:2 1 420px; }
     .screen.active > .answer-grid,
-    .screen.active > .note-select-grid { flex: 1 1 280px; }
-    .screen.active > .feedback { width: 100%; }
+    .screen.active > .note-select-grid { flex:1 1 280px; }
     .screen.active > .btn,
     .screen.active > .btn-row,
-    .screen.active > .theory-submit { flex: 1 1 200px; max-width: 340px; }
-    .screen.active > .nfc-prompt { width: 100%; }
-    .screen.active > .type-toggle { width: 100%; }
-    .screen.active > #triad-drill-view,
-    .screen.active > #triad-ref-view { width: 100%; }
-    .screen.active > .config-section { flex: 1 1 360px; }
-    .screen.active > .section-label { width: 100%; }
-    .screen.active > .fret-legend { width: 100%; }
-    .screen.active > #ref-info { flex: 0 0 200px; }
-    .answer-btn { font-size: 17px; padding: 16px 4px; }
-    .note-select-btn { font-size: 16px; padding: 14px 4px; }
-    .card-main { font-size: 64px; }
-    .theory-triad { font-size: 80px; }
-    .triad-question { font-size: 56px; }
-    .stat-val { font-size: 32px; }
-    .stat-box { padding: 14px; }
+    .screen.active > .theory-submit { flex:1 1 200px; max-width:340px; }
+    .screen.active > .config-section { flex:1 1 360px; }
+    .screen.active > #ref-info { flex:0 0 200px; }
+    .answer-btn { font-size:17px; padding:16px 4px; }
+    .note-select-btn { font-size:16px; padding:14px 4px; }
+    .card-main { font-size:64px; } .theory-triad { font-size:80px; }
+    .triad-question { font-size:56px; } .stat-val { font-size:32px; }
+    .stat-box { padding:14px; }
   }
+  @media (min-width:1024px) { .screen { max-width:1100px; } }
 
-  @media (min-width: 1024px) {
-    .screen { max-width: 1100px; }
-  }
+  .neck-wrap { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; background:var(--panel); border:1px solid var(--border); border-radius:4px; padding:8px 0; }
+  canvas { display:block; }
 
-  .neck-wrap {
-    width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
-    background: var(--panel); border: 1px solid var(--border); border-radius: 4px; padding: 8px 0;
-  }
-  canvas { display: block; }
-
-  .card {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
-    padding: 20px 16px; text-align: center; display: flex; flex-direction: column;
-    justify-content: center; gap: 6px; position: relative; overflow: hidden;
-  }
-  .card::before {
-    content:''; position:absolute; top:0; left:0; right:0; height:2px;
-    background:var(--accent); transform:scaleX(0); transform-origin:left; transition:transform 0.3s ease;
-  }
+  .card { background:var(--panel); border:1px solid var(--border); border-radius:4px; padding:20px 16px; text-align:center; display:flex; flex-direction:column; justify-content:center; gap:6px; position:relative; overflow:hidden; }
+  .card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--accent); transform:scaleX(0); transform-origin:left; transition:transform .3s ease; }
   .card.reveal::before { transform:scaleX(1); }
-
   .card-label { font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; }
   .card-main { font-family:'Bebas Neue',sans-serif; font-size:52px; letter-spacing:4px; color:var(--accent); line-height:1; }
-  .card-reveal { font-family:'Bebas Neue',sans-serif; font-size:36px; color:var(--accent2); letter-spacing:3px; margin-top:4px; opacity:0; transition:opacity 0.3s; }
+  .card-reveal { font-family:'Bebas Neue',sans-serif; font-size:36px; color:var(--accent2); letter-spacing:3px; margin-top:4px; opacity:0; transition:opacity .3s; }
   .card.reveal .card-reveal { opacity:1; }
 
   .answer-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
-  .answer-btn {
-    background:var(--panel); border:1px solid var(--border); color:var(--text);
-    font-family:'IBM Plex Mono',monospace; font-size:15px; padding:13px 4px;
-    border-radius:3px; cursor:pointer; transition:all 0.15s; letter-spacing:1px;
-  }
-  .answer-btn:active { transform:scale(0.96); }
+  .answer-btn { background:var(--panel); border:1px solid var(--border); color:var(--text); font-family:'IBM Plex Mono',monospace; font-size:15px; padding:13px 4px; border-radius:3px; cursor:pointer; transition:background .15s,border-color .15s; letter-spacing:1px; }
+  .answer-btn:active { transform:scale(.96); }
   .answer-btn.correct { background:var(--accent2); border-color:var(--accent2); color:#000; }
-  .answer-btn.wrong { background:var(--wrong); border-color:var(--wrong); color:#fff; }
+  .answer-btn.wrong   { background:var(--wrong);   border-color:var(--wrong);   color:#fff; }
 
-  .btn {
-    background:transparent; border:1px solid var(--accent); color:var(--accent);
-    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:2px;
-    text-transform:uppercase; padding:11px 16px; cursor:pointer; border-radius:3px;
-    transition:all 0.15s; width:100%;
-  }
+  .btn { background:transparent; border:1px solid var(--accent); color:var(--accent); font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; padding:11px 16px; cursor:pointer; border-radius:3px; transition:background .15s; width:100%; }
   .btn:active { background:var(--accent); color:#000; }
   .btn.secondary { border-color:var(--border); color:var(--muted); }
-  .btn.danger { border-color:var(--wrong); color:var(--wrong); }
+  .btn.danger    { border-color:var(--wrong);  color:var(--wrong); }
   .btn-row { display:flex; gap:8px; }
   .btn-row .btn { flex:1; }
 
@@ -165,45 +98,55 @@
   .stat-box { flex:1; background:var(--panel); border:1px solid var(--border); padding:10px; text-align:center; border-radius:3px; }
   .stat-val { font-family:'Bebas Neue',sans-serif; font-size:26px; color:var(--accent); }
   .stat-lbl { font-size:9px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; margin-top:2px; }
+  .score-streak { display:flex; gap:4px; justify-content:center; flex-wrap:wrap; }
+  .streak-dot { width:8px; height:8px; border-radius:50%; background:var(--border); }
+  .streak-dot.hit  { background:var(--accent2); }
+  .streak-dot.miss { background:var(--wrong); }
 
   .feedback { text-align:center; font-size:11px; letter-spacing:2px; text-transform:uppercase; height:18px; color:var(--accent2); }
   .feedback.wrong { color:var(--wrong); }
 
-  .score-streak { display:flex; gap:4px; justify-content:center; flex-wrap:wrap; }
-  .streak-dot { width:8px; height:8px; border-radius:50%; background:var(--border); }
-  .streak-dot.hit { background:var(--accent2); }
-  .streak-dot.miss { background:var(--wrong); }
-
   .config-section { background:var(--panel); border:1px solid var(--border); border-radius:4px; padding:14px; }
   .config-title { font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-bottom:12px; }
-  .fret-zones { display:flex; flex-direction:column; gap:8px; }
-  .fret-zone { display:flex; align-items:center; gap:10px; }
-  .fret-zone > label { font-size:11px; color:var(--text); flex:1; }
+  .cfg-row { display:flex; align-items:center; gap:10px; }
+  .cfg-row > label:first-child { font-size:11px; color:var(--text); flex:1; }
+  .cfg-row + .cfg-row { margin-top:10px; }
   .weight-badge { font-size:10px; color:var(--accent); letter-spacing:1px; width:20px; text-align:right; }
+  .fret-zones { display:flex; flex-direction:column; gap:8px; }
 
   .toggle { position:relative; width:36px; height:20px; flex-shrink:0; }
   .toggle input { opacity:0; width:0; height:0; }
-  .toggle-slider { position:absolute; inset:0; background:var(--border); border-radius:20px; cursor:pointer; transition:0.2s; }
-  .toggle-slider::before { content:''; position:absolute; width:14px; height:14px; left:3px; bottom:3px; background:var(--muted); border-radius:50%; transition:0.2s; }
+  .toggle-slider { position:absolute; inset:0; background:var(--border); border-radius:20px; cursor:pointer; transition:background .2s; }
+  .toggle-slider::before { content:''; position:absolute; width:14px; height:14px; left:3px; bottom:3px; background:var(--muted); border-radius:50%; transition:transform .2s,background .2s; }
   .toggle input:checked + .toggle-slider { background:var(--accent); }
   .toggle input:checked + .toggle-slider::before { transform:translateX(16px); background:#000; }
 
   .type-toggle { display:flex; background:var(--panel); border:1px solid var(--border); border-radius:3px; overflow:hidden; }
-  .type-toggle button {
-    flex:1; background:transparent; border:none; color:var(--muted);
-    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1.5px;
-    text-transform:uppercase; padding:9px; cursor:pointer; transition:all 0.15s;
-    border-right:1px solid var(--border);
-  }
+  .type-toggle button { flex:1; background:transparent; border:none; color:var(--muted); font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; padding:9px; cursor:pointer; transition:background .15s,color .15s; border-right:1px solid var(--border); }
   .type-toggle button:last-child { border-right:none; }
   .type-toggle button.active { background:var(--accent); color:#000; }
+
+  .range-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .range-row label { font-size:11px; color:var(--muted); letter-spacing:1px; white-space:nowrap; }
+  .fret-input { background:var(--bg); border:1px solid var(--border); color:var(--text); font-family:'IBM Plex Mono',monospace; font-size:14px; padding:8px 10px; border-radius:3px; width:56px; text-align:center; }
+  .fret-input:focus { outline:none; border-color:var(--accent); }
+  .range-dash { color:var(--muted); font-size:14px; }
+  .range-hint { font-size:10px; color:var(--muted); margin-top:8px; letter-spacing:1px; line-height:1.5; }
+
+  .key-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  .key-row label { font-size:11px; color:var(--text); }
+  .key-select { background:var(--bg); border:1px solid var(--border); color:var(--text); font-family:'IBM Plex Mono',monospace; font-size:13px; padding:7px 10px; border-radius:3px; cursor:pointer; }
+  .key-select:focus { outline:none; border-color:var(--accent); }
+  .key-hint { font-size:10px; color:var(--muted); margin-top:6px; letter-spacing:1px; line-height:1.5; }
+
+  .cfg-toggle-btn { border-color:var(--border); color:var(--muted); margin-top:4px; }
+  #nfc-cfg-panel { flex-direction:column; gap:10px; }
 
   .triad-question { font-family:'Bebas Neue',sans-serif; font-size:44px; text-align:center; color:var(--accent); letter-spacing:4px; padding:14px 0 4px; }
   .triad-sub { text-align:center; font-size:11px; color:var(--muted); letter-spacing:1.5px; }
   .triad-notes-row { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:6px 0; }
   .note-chip { border:1px solid var(--border); padding:5px 12px; font-size:13px; border-radius:2px; letter-spacing:1px; }
   .note-chip.found { border-color:var(--accent2); color:var(--accent2); }
-
   .triad-ref-wrap { background:var(--panel); border:1px solid var(--border); border-radius:4px; overflow:hidden; }
   .triad-ref-header { display:grid; grid-template-columns:70px 1fr 110px; padding:8px 12px; border-bottom:1px solid var(--border); font-size:9px; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; }
   .triad-ref-row { display:grid; grid-template-columns:70px 1fr 110px; padding:9px 12px; border-bottom:1px solid #1a1a1a; font-size:12px; align-items:center; }
@@ -212,69 +155,49 @@
   .triad-ref-notes { color:var(--text); font-size:11px; }
   .triad-ref-frets { font-size:10px; color:var(--muted); letter-spacing:1px; }
 
-  .section-label { font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; padding:0 2px; }
-  .nfc-prompt { font-size:11px; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; text-align:center; }
-
-  /* FRET RANGE */
-  .range-row { display:flex; align-items:center; gap:8px; }
-  .range-row label { font-size:11px; color:var(--muted); letter-spacing:1px; white-space:nowrap; }
-  .fret-input {
-    background:var(--bg); border:1px solid var(--border); color:var(--text);
-    font-family:'IBM Plex Mono',monospace; font-size:14px;
-    padding:8px 10px; border-radius:3px; width:56px; text-align:center;
-  }
-  .fret-input:focus { outline:none; border-color:var(--accent); }
-  .range-dash { color:var(--muted); font-size:14px; }
-
-  /* THEORY DRILL */
-  .theory-card {
-    background:var(--panel); border:1px solid var(--border); border-radius:4px;
-    padding:28px 20px; text-align:center; display:flex; flex-direction:column; gap:10px;
-  }
+  .theory-card { background:var(--panel); border:1px solid var(--border); border-radius:4px; padding:28px 20px; text-align:center; display:flex; flex-direction:column; gap:10px; }
   .theory-triad { font-family:'Bebas Neue',sans-serif; font-size:64px; letter-spacing:5px; color:var(--accent); line-height:1; }
   .theory-type { font-size:11px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; }
-  .theory-answer { font-size:18px; letter-spacing:3px; color:var(--accent2); min-height:28px; opacity:0; transition:opacity 0.3s; }
+  .theory-answer { font-size:18px; letter-spacing:3px; color:var(--accent2); min-height:28px; opacity:0; transition:opacity .3s; }
   .theory-answer.show { opacity:1; }
-
   .note-select-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
-  .note-select-btn {
-    background:var(--panel); border:1px solid var(--border); color:var(--text);
-    font-family:'IBM Plex Mono',monospace; font-size:14px; padding:12px 4px;
-    border-radius:3px; cursor:pointer; transition:all 0.15s; letter-spacing:1px;
-  }
-  .note-select-btn:active { transform:scale(0.96); }
-  .note-select-btn.selected { background:var(--accent); border-color:var(--accent); color:#000; }
+  .note-select-btn { background:var(--panel); border:1px solid var(--border); color:var(--text); font-family:'IBM Plex Mono',monospace; font-size:14px; padding:12px 4px; border-radius:3px; cursor:pointer; transition:background .15s; letter-spacing:1px; }
+  .note-select-btn:active { transform:scale(.96); }
+  .note-select-btn.selected     { background:var(--accent);  border-color:var(--accent);  color:#000; }
   .note-select-btn.correct-note { background:var(--accent2); border-color:var(--accent2); color:#000; }
-  .note-select-btn.wrong-note { background:var(--wrong); border-color:var(--wrong); color:#fff; }
-
-  .theory-submit {
-    background:transparent; border:1px solid var(--accent); color:var(--accent);
-    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:2px;
-    text-transform:uppercase; padding:11px; cursor:pointer; border-radius:3px; transition:all 0.15s; width:100%;
-  }
-  .theory-submit:active { background:var(--accent); color:#000; }
+  .note-select-btn.wrong-note   { background:var(--wrong);   border-color:var(--wrong);   color:#fff; }
+  .theory-submit { background:transparent; border:1px solid var(--accent); color:var(--accent); font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; padding:11px; cursor:pointer; border-radius:3px; transition:background .15s; width:100%; }
+  .theory-submit:active   { background:var(--accent); color:#000; }
   .theory-submit:disabled { border-color:var(--border); color:var(--muted); cursor:default; }
 
-  /* FRET COLOR LEGEND */
   .fret-legend { display:flex; gap:12px; flex-wrap:wrap; padding:4px 2px; }
   .fret-pip { display:flex; align-items:center; gap:5px; font-size:10px; color:var(--muted); letter-spacing:1px; }
   .fret-pip-dot { width:10px; height:10px; border-radius:2px; }
+
+  .section-label { font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; padding:0 2px; }
+  .nfc-prompt { font-size:11px; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; text-align:center; }
+
+  .answer-grid-wrap { display:flex; flex-direction:column; gap:6px; }
+  .answer-row-label { font-size:9px; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; padding:0 2px; }
+  .answer-row { display:grid; gap:8px; }
+
+  .sr-mode-badge { font-size:9px; letter-spacing:1px; color:var(--muted); text-align:center; padding:2px 0; }
+  .sr-mode-badge span { color:var(--accent2); }
 </style>
 </head>
 <body>
 
 <header>
   <h1>Steel Neck</h1>
-  <span>E9 Trainer — Open Strings</span>
+  <span id="header-mode">E9 &middot; Note Names</span>
 </header>
 
 <div class="tab-bar">
-  <div class="tab active" onclick="switchTab('neckfc')">Neck FC</div>
+  <div class="tab active" onclick="switchTab('neckfc')">Neck</div>
   <div class="tab" onclick="switchTab('triad')">Triads</div>
   <div class="tab" onclick="switchTab('theory')">Theory</div>
-  <div class="tab" onclick="switchTab('neck')">Ref</div>
-  <div class="tab" onclick="switchTab('config')">Config</div>
-  <div class="tab" onclick="switchTab('flashcard')">Notes</div>
+  <div class="tab" onclick="switchTab('ref')">Ref</div>
+  <div class="tab" onclick="switchTab('notes')">Notes</div>
 </div>
 
 <!-- NECK FLASHCARD -->
@@ -282,14 +205,71 @@
   <div class="stats-row">
     <div class="stat-box"><div class="stat-val" id="nfc-correct">0</div><div class="stat-lbl">Correct</div></div>
     <div class="stat-box"><div class="stat-val" id="nfc-streak">0</div><div class="stat-lbl">Streak</div></div>
-    <div class="stat-box"><div class="stat-val" id="nfc-pct">—</div><div class="stat-lbl">Accuracy</div></div>
+    <div class="stat-box"><div class="stat-val" id="nfc-pct">&#8212;</div><div class="stat-lbl">Accuracy</div></div>
   </div>
   <div class="score-streak" id="nfc-streak-dots"></div>
-  <div class="nfc-prompt">What note is highlighted?</div>
+  <div class="nfc-prompt" id="nfc-prompt-text">What note is highlighted?</div>
   <div class="neck-wrap"><canvas id="nfc-canvas"></canvas></div>
   <div class="feedback" id="nfc-feedback"></div>
-  <div class="answer-grid" id="nfc-answer-grid"></div>
-  <button class="btn secondary" onclick="nfcSkip()">Skip →</button>
+  <div class="answer-grid-wrap" id="nfc-answer-wrap">
+    <div id="nfc-answer-grid"></div>
+  </div>
+  <button class="btn secondary cfg-toggle-btn" id="cfg-toggle-lbl" onclick="toggleCfg()">Settings &#9662;</button>
+  <div id="nfc-cfg-panel" style="display:none;">
+    <div class="config-section">
+      <div class="config-title">Display Mode</div>
+      <div class="type-toggle" id="display-mode-toggle">
+        <button class="active" onclick="setDisplayMode('notes')">Notes</button>
+        <button onclick="setDisplayMode('numbers')">Numbers</button>
+        <button onclick="setDisplayMode('both')">Both</button>
+      </div>
+      <div id="key-selector-wrap">
+        <div class="key-row">
+          <label>Key (root)</label>
+          <select class="key-select" id="cfg-key" onchange="onKeyChange()">
+            <option>G</option><option>D</option><option>A</option>
+            <option selected>E</option>
+            <option>B</option><option>F#</option><option>C#</option>
+            <option>C</option><option>F</option><option>Bb</option>
+            <option>Eb</option><option>Ab</option>
+          </select>
+        </div>
+        <div class="key-hint">Theory tab always uses note names.<br>Both: dots and buttons show Note/Degree.</div>
+      </div>
+    </div>
+    <div class="config-section">
+      <div class="config-title">Fret Range</div>
+      <div class="range-row">
+        <label>From</label>
+        <input class="fret-input" type="number" id="cfg-fret-min" value="0" min="0" max="12" onchange="onRangeChange()">
+        <span class="range-dash">&#8212;</span>
+        <input class="fret-input" type="number" id="cfg-fret-max" value="12" min="0" max="12" onchange="onRangeChange()">
+        <label>to</label>
+      </div>
+      <div class="range-hint">Neck collapses to this range. Same value = single fret.</div>
+    </div>
+    <div class="config-section">
+      <div class="config-title">Spaced Repetition Mode</div>
+      <div class="type-toggle" id="sr-mode-toggle">
+        <button onclick="setSRMode('intro')">Intro</button>
+        <button class="active" onclick="setSRMode('standard')">Standard</button>
+        <button onclick="setSRMode('deep')">Deep</button>
+      </div>
+      <div class="range-hint" id="sr-mode-hint">Standard: neutral weighting, 3-exposure floor before de-prioritizing.</div>
+    </div>
+    <div class="config-section">
+      <div class="config-title">Options</div>
+      <div class="cfg-row">
+        <label>Multiple choice</label>
+        <label class="toggle"><input type="checkbox" id="cfg-mc" checked onchange="newNfcCard()"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="cfg-row">
+        <label>Play tone on new note</label>
+        <label class="toggle"><input type="checkbox" id="cfg-tone" checked><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+    <button class="btn danger" onclick="resetStats()">Reset All Stats</button>
+  </div>
 </div>
 
 <!-- TRIADS -->
@@ -298,16 +278,15 @@
     <button class="active" onclick="setTriadMode('drill')">Drill</button>
     <button onclick="setTriadMode('ref')">Reference</button>
   </div>
-
   <div id="triad-drill-view" style="display:flex;flex-direction:column;gap:14px;">
     <div class="stats-row">
       <div class="stat-box"><div class="stat-val" id="tr-found">0</div><div class="stat-lbl">Found</div></div>
       <div class="stat-box"><div class="stat-val" id="tr-missed">0</div><div class="stat-lbl">Missed</div></div>
-      <div class="stat-box"><div class="stat-val" id="tr-fret">—</div><div class="stat-lbl">At Fret</div></div>
+      <div class="stat-box"><div class="stat-val" id="tr-fret">&#8212;</div><div class="stat-lbl">At Fret</div></div>
     </div>
     <div class="card">
       <div class="card-label">Find all instances at this fret</div>
-      <div class="triad-question" id="tr-name">—</div>
+      <div class="triad-question" id="tr-name">&#8212;</div>
       <div class="triad-sub" id="tr-type"></div>
       <div class="triad-notes-row" id="tr-note-chips"></div>
     </div>
@@ -318,7 +297,6 @@
       <button class="btn secondary" onclick="revealTriad()">Reveal</button>
     </div>
   </div>
-
   <div id="triad-ref-view" style="display:none;flex-direction:column;gap:10px;">
     <div class="section-label">Same-fret triads on E9</div>
     <div class="type-toggle" id="triad-ref-filter">
@@ -333,28 +311,28 @@
   </div>
 </div>
 
-<!-- THEORY DRILL -->
+<!-- THEORY -->
 <div class="screen" id="screen-theory">
   <div class="stats-row">
     <div class="stat-box"><div class="stat-val" id="th-correct">0</div><div class="stat-lbl">Correct</div></div>
     <div class="stat-box"><div class="stat-val" id="th-streak">0</div><div class="stat-lbl">Streak</div></div>
-    <div class="stat-box"><div class="stat-val" id="th-pct">—</div><div class="stat-lbl">Accuracy</div></div>
+    <div class="stat-box"><div class="stat-val" id="th-pct">&#8212;</div><div class="stat-lbl">Accuracy</div></div>
   </div>
   <div class="score-streak" id="th-streak-dots"></div>
   <div class="theory-card">
     <div class="theory-type" id="th-type">Major</div>
-    <div class="theory-triad" id="th-name">—</div>
+    <div class="theory-triad" id="th-name">&#8212;</div>
     <div class="card-label">Select the 3 notes in this triad</div>
     <div class="theory-answer" id="th-reveal"></div>
   </div>
   <div class="feedback" id="th-feedback"></div>
   <div class="note-select-grid" id="th-note-grid"></div>
   <button class="theory-submit" id="th-submit" onclick="submitTheory()" disabled>Check</button>
-  <button class="btn secondary" onclick="newTheoryCard()">Skip →</button>
+  <button class="btn secondary" onclick="newTheoryCard()">Skip &#8594;</button>
 </div>
 
-<!-- NECK REFERENCE -->
-<div class="screen" id="screen-neck">
+<!-- REF -->
+<div class="screen" id="screen-ref">
   <div class="fret-legend">
     <div class="fret-pip"><div class="fret-pip-dot" style="background:var(--fret-yellow)"></div>Fret 3</div>
     <div class="fret-pip"><div class="fret-pip-dot" style="background:var(--fret-red)"></div>Fret 5</div>
@@ -362,223 +340,536 @@
     <div class="fret-pip"><div class="fret-pip-dot" style="background:var(--fret-teal)"></div>Fret 9</div>
   </div>
   <div class="neck-wrap"><canvas id="ref-canvas"></canvas></div>
-  <div class="card" id="ref-info" style="padding:12px 16px;min-height:unset;">
-    <div class="card-label">Tap any position</div>
-    <div id="ref-note" style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--accent);letter-spacing:3px"></div>
+  <div class="card" id="ref-info" style="padding:12px 16px;">
+    <div class="card-label" id="ref-label">Tap any position</div>
+    <div id="ref-note" style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--accent);letter-spacing:3px;min-height:38px;"></div>
   </div>
-</div>
-
-<!-- CONFIG -->
-<div class="screen" id="screen-config">
-  <div class="config-section">
-    <div class="config-title">Fret Range</div>
-    <div class="range-row">
-      <label>From fret</label>
-      <input class="fret-input" type="number" id="cfg-fret-min" value="0" min="0" max="12" onchange="onRangeChange()">
-      <span class="range-dash">—</span>
-      <input class="fret-input" type="number" id="cfg-fret-max" value="12" min="0" max="12" onchange="onRangeChange()">
-      <label>to fret</label>
-    </div>
-    <div style="font-size:10px;color:var(--muted);margin-top:10px;letter-spacing:1px">
-      Range applies to Notes and Neck FC tabs. Zones below add weighted emphasis within the range.
-    </div>
-  </div>
-  <div class="config-section">
-    <div class="config-title">Weighted Zones (within range)</div>
-    <div class="fret-zones" id="fret-zone-list"></div>
-  </div>
-  <div class="config-section">
-    <div class="config-title">Options</div>
-    <div class="fret-zone">
-      <label>Multiple choice answers</label>
-      <label class="toggle"><input type="checkbox" id="cfg-mc" checked><span class="toggle-slider"></span></label>
-    </div>
-  </div>
-  <button class="btn danger" onclick="resetStats()">Reset All Stats</button>
 </div>
 
 <!-- NOTES FLASHCARD -->
-<div class="screen" id="screen-flashcard">
+<div class="screen" id="screen-notes">
   <div class="stats-row">
     <div class="stat-box"><div class="stat-val" id="fc-correct">0</div><div class="stat-lbl">Correct</div></div>
     <div class="stat-box"><div class="stat-val" id="fc-streak">0</div><div class="stat-lbl">Streak</div></div>
-    <div class="stat-box"><div class="stat-val" id="fc-pct">—</div><div class="stat-lbl">Accuracy</div></div>
+    <div class="stat-box"><div class="stat-val" id="fc-pct">&#8212;</div><div class="stat-lbl">Accuracy</div></div>
   </div>
   <div class="score-streak" id="streak-dots"></div>
   <div class="card" id="fc-card">
-    <div class="card-label">String · Fret</div>
-    <div class="card-main" id="fc-position">—</div>
+    <div class="card-label">String &middot; Fret</div>
+    <div class="card-main" id="fc-position">&#8212;</div>
     <div class="card-reveal" id="fc-answer"></div>
   </div>
   <div class="feedback" id="fc-feedback"></div>
-  <div class="answer-grid" id="answer-grid"></div>
-  <button class="btn secondary" onclick="skipCard()">Skip →</button>
+  <div class="answer-grid-wrap" id="fc-answer-wrap">
+    <div id="answer-grid"></div>
+  </div>
+  <button class="btn secondary" onclick="skipCard()">Skip &#8594;</button>
 </div>
 
 <script>
-// ─── TUNING ───────────────────────────────────────────────────────────────────
-const OPEN_NOTES = ['F#','D#','G#','E','B','G#','F#','E','D','B'];
-const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
-const DISPLAY_MAP = {'A#':'Bb'};
-const ALL_DISPLAY_NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','Bb','B'];
+'use strict';
 
-function noteName(n) { return DISPLAY_MAP[n] || n; }
+// ─── TUNING ───────────────────────────────────────────────────────────────────
+const OPEN_NOTES   = ['F#','D#','G#','E','B','G#','F#','E','D','B'];
+const NOTE_NAMES   = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const DISPLAY_MAP  = {'A#':'Bb'};
+const ALL_NOTES    = ['C','C#','D','D#','E','F','F#','G','G#','A','Bb','B'];
+const DEGREE_NAMES = ['1','\u{266D}2','2','\u{266D}3','3','4','\u{266D}5','5','\u{266D}6','6','\u{266D}7','7'];
+
+function noteName(n)  { return DISPLAY_MAP[n] || n; }
 function noteAt(s, f) { return NOTE_NAMES[(NOTE_NAMES.indexOf(OPEN_NOTES[s]) + f) % 12]; }
-function displayNote(s, f) { return noteName(noteAt(s, f)); }
+// Open-string MIDI numbers (A4=69): F#4 D#4 G#4 E4 B3 G#3 F#3 E3 D3 B2
+const OPEN_MIDI = [66,63,68,64,59,56,54,52,50,47];
+function noteHz(s, f) { return 440 * Math.pow(2, (OPEN_MIDI[s] + f - 69) / 12); }
+
+// ─── AUDIO ────────────────────────────────────────────────────────────────────
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playTone(hz) {
+  if (!document.getElementById('cfg-tone').checked) return;
+  const ctx  = getAudioCtx();
+  const osc  = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type = 'sine';
+  osc.frequency.value = hz;
+  const t = ctx.currentTime;
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(0.18, t + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);
+  osc.start(t);
+  osc.stop(t + 0.56);
+}
+
+// ─── DISPLAY MODE ─────────────────────────────────────────────────────────────
+let displayMode = 'notes'; // 'notes' | 'numbers' | 'both'
+let activeTab   = 'neckfc';
+
+function getKeyRoot() {
+  const map = {'Bb':'A#','Eb':'D#','Ab':'G#'};
+  const k   = document.getElementById('cfg-key').value;
+  return map[k] || k;
+}
+
+function noteToNumber(n) {
+  const interval = (NOTE_NAMES.indexOf(n) - NOTE_NAMES.indexOf(getKeyRoot()) + 12) % 12;
+  return DEGREE_NAMES[interval];
+}
+
+function displayLabel(s, f) {
+  const n = noteAt(s, f);
+  if (displayMode === 'numbers') return noteToNumber(n);
+  if (displayMode === 'both')    return noteName(n) + '/' + noteToNumber(n);
+  return noteName(n);
+}
+
+function answerOptions() {
+  if (displayMode === 'numbers') return [...DEGREE_NAMES];
+  if (displayMode === 'both')    return NOTE_NAMES.map(n => noteName(n) + '/' + noteToNumber(n));
+  return [...ALL_NOTES];
+}
+
+function setDisplayMode(mode) {
+  displayMode = mode;
+  document.querySelectorAll('#display-mode-toggle button').forEach((b, i) =>
+    b.classList.toggle('active', ['notes','numbers','both'][i] === mode));
+  updateHeaderMode();
+  newNfcCard();
+  newCard();
+  if (activeTab === 'ref') drawRefNeck();
+}
+
+function onKeyChange() {
+  updateHeaderMode();
+  newNfcCard();
+  newCard();
+  if (activeTab === 'ref') drawRefNeck();
+}
+
+function updateHeaderMode() {
+  const key   = document.getElementById('cfg-key').value;
+  const label = {notes:'Note Names', numbers:'Nashville \u00b7 ' + key, both:'Notes + Numbers \u00b7 ' + key}[displayMode];
+  document.getElementById('header-mode').textContent = 'E9 \u00b7 ' + label;
+}
 
 // ─── FRET COLORS ─────────────────────────────────────────────────────────────
 const FRET_COLORS = {3:'#d4b800', 5:'#c84040', 7:'#4466cc', 9:'#2a9d8f'};
 
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
 function getFretRange() {
-  const mn = parseInt(document.getElementById('cfg-fret-min').value) || 0;
-  const mx = parseInt(document.getElementById('cfg-fret-max').value) || 12;
-  return { min: Math.min(mn,mx), max: Math.max(mn,mx) };
+  const minRaw = document.getElementById('cfg-fret-min').value;
+  const maxRaw = document.getElementById('cfg-fret-max').value;
+  let mn = isNaN(parseInt(minRaw)) ? 0  : parseInt(minRaw);
+  let mx = isNaN(parseInt(maxRaw)) ? 12 : parseInt(maxRaw);
+  mn = Math.max(0, Math.min(12, mn));
+  mx = Math.max(0, Math.min(12, mx));
+  if (mn > mx) { const t = mn; mn = mx; mx = t; }
+  return {min:mn, max:mx};
 }
 
-function onRangeChange() { buildPool(); buildNfcPool(); }
+function onRangeChange() { buildPool(); buildNfcPool(); newNfcCard(); newCard(); }
 
-const ZONES = [
-  { label: '12th fret', frets: [12], weight: 3, active: true },
-  { label: '11–13', frets: [11,12,13], weight: 2, active: false },
-  { label: '5th fret', frets: [5], weight: 2, active: false },
-  { label: '7th fret', frets: [7], weight: 1, active: false },
-  { label: 'Open (0)', frets: [0], weight: 1, active: false },
-  { label: '1–4', frets: [1,2,3,4], weight: 1, active: false },
-];
+function toggleCfg() {
+  const panel = document.getElementById('nfc-cfg-panel');
+  const btn   = document.getElementById('cfg-toggle-lbl');
+  const open  = panel.style.display === 'none';
+  panel.style.display = open ? 'flex' : 'none';
+  btn.textContent     = open ? 'Settings \u25b4' : 'Settings \u25be';
+}
 
-function buildZoneUI() {
-  const el = document.getElementById('fret-zone-list');
-  el.innerHTML = '';
-  ZONES.forEach((z, i) => {
-    const row = document.createElement('div');
-    row.className = 'fret-zone';
-    row.innerHTML = `<label>${z.label}</label><span class="weight-badge">×${z.weight}</span><label class="toggle"><input type="checkbox" ${z.active?'checked':''} onchange="ZONES[${i}].active=this.checked;buildPool();buildNfcPool()"><span class="toggle-slider"></span></label>`;
-    el.appendChild(row);
-  });
+// ─── SPACED REPETITION ────────────────────────────────────────────────────────
+// srData[key] = {correct, total}  key = "s,f"
+let srData = {};
+let srMode = 'standard'; // 'intro' | 'standard' | 'deep'
+
+const SR_HINTS = {
+  intro:    'Intro: leans on familiar positions; low priority for unseen.',
+  standard: 'Standard: neutral weighting, 3-exposure floor before de-prioritizing.',
+  deep:     'Deep: high priority for unseen — forces systematic coverage.',
+};
+
+function srKey(s, f) { return s + ',' + f; }
+
+function srGet(s, f) {
+  const k = srKey(s, f);
+  if (!srData[k]) srData[k] = {correct:0, total:0};
+  return srData[k];
+}
+
+function srRecord(s, f, hit) {
+  const d = srGet(s, f);
+  d.total++;
+  if (hit) d.correct++;
+}
+
+function setSRMode(mode) {
+  srMode = mode;
+  document.querySelectorAll('#sr-mode-toggle button').forEach((b, i) =>
+    b.classList.toggle('active', ['intro','standard','deep'][i] === mode));
+  document.getElementById('sr-mode-hint').textContent = SR_HINTS[mode];
+  buildPool(); buildNfcPool();
+}
+
+// Weight a position based on SR mode and exposure data
+function srWeight(s, f) {
+  const d = srGet(s, f);
+  const acc = d.total > 0 ? d.correct / d.total : -1; // -1 = unseen
+  const seen = d.total > 0;
+  if (srMode === 'intro') {
+    // Unseen = low weight (1); seen with low accuracy = high; seen with high accuracy = medium
+    if (!seen)        return 1;
+    if (acc < 0.5)    return 6;
+    if (acc < 0.8)    return 3;
+    return 2;
+  }
+  if (srMode === 'standard') {
+    // Unseen or < 3 exposures = neutral (3); struggling = boost; mastered = reduce
+    if (d.total < 3)  return 3;
+    if (acc < 0.5)    return 6;
+    if (acc < 0.75)   return 4;
+    if (acc >= 0.9)   return 1;
+    return 2;
+  }
+  // deep: unseen = very high priority; struggling = high; mastered = low
+  if (!seen)          return 8;
+  if (acc < 0.5)      return 6;
+  if (acc < 0.75)     return 4;
+  if (acc >= 0.9)     return 1;
+  return 2;
 }
 
 function randomFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-// ─── BUILD POOLS ──────────────────────────────────────────────────────────────
+// ─── POOL ─────────────────────────────────────────────────────────────────────
 function buildPoolFromRange() {
-  const { min, max } = getFretRange();
-  const allFrets = Array.from({length: max - min + 1}, (_,i) => i + min);
+  const {min, max} = getFretRange();
   const pool = [];
-  // Base: one entry per position in range
-  for (let s=0;s<10;s++) allFrets.forEach(f => pool.push({s,f}));
-  // Extra weight from zones (only if fret is in range)
-  ZONES.forEach(z => {
-    if (!z.active) return;
-    for (let s=0;s<10;s++) {
-      z.frets.filter(f=>f>=min&&f<=max).forEach(f => {
-        for (let w=1;w<z.weight;w++) pool.push({s,f});
-      });
+  for (let s = 0; s < 10; s++)
+    for (let f = min; f <= max; f++) {
+      const w = srWeight(s, f);
+      for (let i = 0; i < w; i++) pool.push({s, f});
     }
-  });
   return pool;
 }
 
 let pool = [], nfcPool = [];
-let currentCard = null, fcCorrect = 0, fcTotal = 0, fcDots = [];
-let nfcCard = null, nfcCorrect = 0, nfcTotal = 0, nfcDots = [];
+function buildPool()    { pool    = buildPoolFromRange(); }
+function buildNfcPool() { nfcPool = buildPoolFromRange(); }
 
-function buildPool() { pool = buildPoolFromRange(); newCard(); }
-function buildNfcPool() { nfcPool = buildPoolFromRange(); newNfcCard(); }
+// ─── STATS ────────────────────────────────────────────────────────────────────
+let fcCorrect=0,  fcTotal=0,  fcDots=[];
+let nfcCorrect=0, nfcTotal=0, nfcDots=[];
+let thCorrect=0,  thTotal=0,  thDots=[];
 
-// ─── NOTES FLASHCARD ──────────────────────────────────────────────────────────
-function newCard() {
-  if (!pool.length) return;
-  currentCard = randomFrom(pool);
-  document.getElementById('fc-card').classList.remove('reveal');
-  document.getElementById('fc-position').textContent = `S${currentCard.s+1}  F${currentCard.f}`;
-  document.getElementById('fc-answer').textContent = '';
-  clearFeedback('fc');
-  if (document.getElementById('cfg-mc').checked) buildFcGrid();
-  else document.getElementById('answer-grid').innerHTML = `<button class="btn" onclick="revealCard()" style="grid-column:span 4">Reveal</button>`;
+function currentStreak(dots) {
+  let s = 0;
+  for (let i = dots.length - 1; i >= 0; i--) { if (dots[i] === true) s++; else break; }
+  return s;
 }
 
-function buildFcGrid() {
-  const correct = displayNote(currentCard.s, currentCard.f);
-  const opts = new Set([correct]);
-  while (opts.size < 8) opts.add(randomFrom(ALL_DISPLAY_NOTES));
-  const grid = document.getElementById('answer-grid');
-  grid.innerHTML = '';
-  [...opts].sort(()=>Math.random()-.5).forEach(n => {
-    const b = document.createElement('button');
-    b.className = 'answer-btn'; b.textContent = n;
-    b.onclick = () => checkFcAnswer(n, b);
-    grid.appendChild(b);
+function updateStats(prefix) {
+  const cfg = {
+    fc:  {correct:fcCorrect,  total:fcTotal,  dots:fcDots,  dotId:'streak-dots'},
+    nfc: {correct:nfcCorrect, total:nfcTotal, dots:nfcDots, dotId:'nfc-streak-dots'},
+    th:  {correct:thCorrect,  total:thTotal,  dots:thDots,  dotId:'th-streak-dots'},
+  }[prefix];
+  document.getElementById(prefix + '-correct').textContent = cfg.correct;
+  document.getElementById(prefix + '-streak').textContent  = currentStreak(cfg.dots);
+  document.getElementById(prefix + '-pct').textContent     = cfg.total ? Math.round(100 * cfg.correct / cfg.total) + '%' : '\u2014';
+  document.getElementById(cfg.dotId).innerHTML = cfg.dots.slice(-12)
+    .map(d => '<div class="streak-dot ' + (d === true ? 'hit' : d === false ? 'miss' : '') + '"></div>').join('');
+}
+
+function resetStats() {
+  fcCorrect=0; fcTotal=0; fcDots=[];
+  nfcCorrect=0; nfcTotal=0; nfcDots=[];
+  thCorrect=0; thTotal=0; thDots=[];
+  srData = {};
+  buildPool(); buildNfcPool();
+  updateStats('fc'); updateStats('nfc'); updateStats('th');
+}
+
+function setFeedback(prefix, msg, wrong) {
+  const el = document.getElementById(prefix + '-feedback');
+  el.textContent = msg;
+  el.className = 'feedback' + (wrong ? ' wrong' : '');
+}
+function clearFeedback(prefix) { setFeedback(prefix, '', false); }
+
+// ─── NECK DRAWING ─────────────────────────────────────────────────────────────
+const ROW_H=26, LEFT_PAD=30, TOP_PAD=26, BOTTOM_PAD=10;
+
+function getNeckDims(canvas, range) {
+  const {min, max} = range;
+  const fretCount  = max - min + 1;
+  const available  = canvas.parentElement.offsetWidth || 340;
+  const maxColW    = fretCount === 1 ? 80 : available;
+  const COL_W      = Math.min(maxColW, Math.max(26, Math.floor((available - 36) / fretCount)));
+  canvas.width     = LEFT_PAD + fretCount * COL_W + 6;
+  canvas.height    = TOP_PAD + 10 * ROW_H + BOTTOM_PAD;
+  return {COL_W, fretCount, fretMin:min};
+}
+
+function drawNeck(canvas, highlights, interactive, onTap, range) {
+  if (!range) range = getFretRange();
+  const ctx = canvas.getContext('2d');
+  const {COL_W, fretCount, fretMin} = getNeckDims(canvas, range);
+  const W = canvas.width, H = canvas.height;
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#111';
+  ctx.fillRect(0, 0, W, H);
+
+  for (const [fStr, color] of Object.entries(FRET_COLORS)) {
+    const f = parseInt(fStr);
+    if (f < fretMin || f >= fretMin + fretCount) continue;
+    ctx.fillStyle = color + '22';
+    ctx.fillRect(LEFT_PAD + (f - fretMin) * COL_W, TOP_PAD - 8, COL_W, 10 * ROW_H + 8);
+  }
+
+  for (let i = 0; i < fretCount; i++) {
+    const f     = fretMin + i;
+    const x     = LEFT_PAD + i * COL_W + COL_W / 2;
+    const color = FRET_COLORS[f];
+    ctx.fillStyle = color || (f === 12 ? '#888' : '#3a3a3a');
+    ctx.font      = (color ? 'bold ' : '') + '9px IBM Plex Mono';
+    ctx.textAlign = 'center';
+    ctx.fillText(f === 0 ? 'O' : f, x, 16);
+  }
+
+  for (let s = 0; s < 10; s++) {
+    const y = TOP_PAD + s * ROW_H + ROW_H / 2;
+    ctx.strokeStyle = '#252525';
+    ctx.lineWidth   = 1 + (s > 6 ? 0.4 : 0);
+    ctx.beginPath(); ctx.moveTo(LEFT_PAD, y); ctx.lineTo(W - 4, y); ctx.stroke();
+    ctx.fillStyle = '#aaa'; ctx.font = '9px IBM Plex Mono'; ctx.textAlign = 'right';
+    ctx.fillText('S' + (s + 1), LEFT_PAD - 4, y + 3);
+  }
+
+  for (let i = 0; i <= fretCount; i++) {
+    const f     = fretMin + i;
+    const x     = LEFT_PAD + i * COL_W;
+    const color = FRET_COLORS[f];
+    ctx.strokeStyle = color ? color + '88' : (f === 0 && fretMin === 0 ? '#555' : '#1e1e1e');
+    ctx.lineWidth   = (color || (f === 0 && fretMin === 0)) ? 2 : 1;
+    ctx.beginPath(); ctx.moveTo(x, TOP_PAD - 4); ctx.lineTo(x, TOP_PAD + 10 * ROW_H - 4); ctx.stroke();
+  }
+
+  (highlights || []).forEach(h => {
+    if (h.f < fretMin || h.f >= fretMin + fretCount) return;
+    const x = LEFT_PAD + (h.f - fretMin) * COL_W + COL_W / 2;
+    const y = TOP_PAD + h.s * ROW_H + ROW_H / 2;
+    ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI * 2);
+    ctx.fillStyle = h.color || '#c8a84b'; ctx.fill();
+    if (h.label) {
+      ctx.fillStyle = '#000'; ctx.font = 'bold 8px IBM Plex Mono'; ctx.textAlign = 'center';
+      ctx.fillText(h.label, x, y + 3);
+    }
+  });
+
+  canvas.ontouchstart = null; canvas.onclick = null;
+  if (interactive && onTap) {
+    const handler = e => {
+      e.preventDefault();
+      const rect  = canvas.getBoundingClientRect();
+      const scaleX = canvas.width  / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const px = ((e.touches ? e.touches[0].clientX : e.clientX) - rect.left) * scaleX;
+      const py = ((e.touches ? e.touches[0].clientY : e.clientY) - rect.top)  * scaleY;
+      const col = Math.round((px - LEFT_PAD) / COL_W);
+      const s   = Math.round((py - TOP_PAD)  / ROW_H);
+      if (col >= 0 && col < fretCount && s >= 0 && s < 10) onTap(s, fretMin + col);
+    };
+    canvas.ontouchstart = handler;
+    canvas.onclick      = handler;
+  }
+}
+
+// ─── KEY-ORDERED ANSWER GRID ──────────────────────────────────────────────────
+// Major scale intervals (W W H W W W H) → degrees 0,2,4,5,7,9,11
+const MAJOR_INTERVALS = [0,2,4,5,7,9,11];
+
+function getDiatonicNotes() {
+  const root = NOTE_NAMES.indexOf(getKeyRoot());
+  return MAJOR_INTERVALS.map(i => NOTE_NAMES[(root + i) % 12]);
+}
+
+function getNotesInRange() {
+  const {min, max} = getFretRange();
+  const present = new Set();
+  for (let s = 0; s < 10; s++)
+    for (let f = min; f <= max; f++)
+      present.add(noteAt(s, f));
+  return present;
+}
+
+function getDiatonicInRange() {
+  const present = getNotesInRange();
+  return getDiatonicNotes().filter(n => present.has(n)); // preserves scale order
+}
+
+function getAccidentalsInRange() {
+  const diatonic = new Set(getDiatonicNotes());
+  const present  = getNotesInRange();
+  return NOTE_NAMES.filter(n => present.has(n) && !diatonic.has(n)); // chromatic order
+}
+
+function buildKeyOrderedGrid(containerId, correctRaw, onAnswer) {
+  // correctRaw is the internal note name (e.g. 'A#')
+  const diatonic    = getDiatonicInRange();
+  const accidentals = getAccidentalsInRange();
+  const wrap        = document.getElementById(containerId);
+  wrap.innerHTML    = '';
+
+  function makeRow(notes, label) {
+    if (!notes.length) return;
+    const rowWrap = document.createElement('div');
+    rowWrap.className = 'answer-row-label';
+    rowWrap.textContent = label;
+    wrap.appendChild(rowWrap);
+    const row = document.createElement('div');
+    row.className = 'answer-row';
+    row.style.gridTemplateColumns = 'repeat(' + notes.length + ',1fr)';
+    notes.forEach(n => {
+      const displayN = displayMode === 'numbers' ? noteToNumber(n)
+                     : displayMode === 'both'    ? noteName(n) + '/' + noteToNumber(n)
+                     : noteName(n);
+      const correctDisplay = displayMode === 'numbers' ? noteToNumber(correctRaw)
+                           : displayMode === 'both'    ? noteName(correctRaw) + '/' + noteToNumber(correctRaw)
+                           : noteName(correctRaw);
+      const b = document.createElement('button');
+      b.className = 'answer-btn';
+      b.textContent = displayN;
+      b.dataset.raw = n;
+      b.onclick = () => onAnswer(displayN, correctDisplay, b, wrap);
+      row.appendChild(b);
+    });
+    wrap.appendChild(row);
+  }
+
+  makeRow(diatonic,    'Key tones');
+  makeRow(accidentals, 'Accidentals');
+}
+
+// ─── NECK FLASHCARD ───────────────────────────────────────────────────────────
+let nfcCard = null;
+
+function newNfcCard() {
+  buildNfcPool(); // rebuild weighted pool on every new question
+  if (!nfcPool.length) return;
+  nfcCard = randomFrom(nfcPool);
+  clearFeedback('nfc');
+  const prompts = {notes:'What note is highlighted?', numbers:'What degree is highlighted?', both:'Note and degree?'};
+  document.getElementById('nfc-prompt-text').textContent = prompts[displayMode];
+  if (document.getElementById('cfg-mc').checked) buildNfcGrid();
+  else {
+    const wrap = document.getElementById('nfc-answer-grid');
+    wrap.innerHTML = '<button class="btn" onclick="revealNfcCard()" style="width:100%;margin-top:4px">Reveal</button>';
+  }
+  drawNfcNeck(false);
+  playTone(noteHz(nfcCard.s, nfcCard.f));
+}
+
+function revealNfcCard() {
+  drawNfcNeck(true);
+  const wrap = document.getElementById('nfc-answer-grid');
+  wrap.innerHTML = '<button class="btn" onclick="newNfcCard()" style="width:100%;margin-top:4px">Next \u2192</button>';
+}
+
+function drawNfcNeck(revealed) {
+  const canvas = document.getElementById('nfc-canvas');
+  drawNeck(canvas,
+    [{s:nfcCard.s, f:nfcCard.f, color:revealed?'#7fbfb0':'#c8a84b', label:revealed?displayLabel(nfcCard.s,nfcCard.f):'?'}],
+    false, null, getFretRange());
+}
+
+function buildNfcGrid() {
+  const correctRaw = noteAt(nfcCard.s, nfcCard.f);
+  buildKeyOrderedGrid('nfc-answer-grid', correctRaw, (chosen, correct, btn, wrap) => {
+    checkNfcAnswer(chosen, correct, btn, wrap);
   });
 }
 
-function checkFcAnswer(chosen, btn) {
-  const correct = displayNote(currentCard.s, currentCard.f);
-  fcTotal++;
-  if (chosen === correct) {
-    fcCorrect++; btn.classList.add('correct'); fcDots.push(true);
-    setFeedback('fc','Correct',false); setTimeout(newCard,600);
+function checkNfcAnswer(chosen, correct, btn, wrap) {
+  nfcTotal++;
+  const hit = chosen === correct;
+  srRecord(nfcCard.s, nfcCard.f, hit);
+  if (hit) {
+    nfcCorrect++; nfcDots.push(true);
+    btn.classList.add('correct');
+    setFeedback('nfc', 'Correct', false);
+    drawNfcNeck(true);
+    setTimeout(newNfcCard, 700);
   } else {
+    nfcDots.push(false);
     btn.classList.add('wrong');
-    document.querySelectorAll('#answer-grid .answer-btn').forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});
-    fcDots.push(false); setFeedback('fc','Wrong — '+correct,true); setTimeout(newCard,1200);
+    wrap.querySelectorAll('.answer-btn').forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
+    setFeedback('nfc', 'Wrong \u2014 ' + correct, true);
+    drawNfcNeck(true);
+    setTimeout(newNfcCard, 1300);
+  }
+  updateStats('nfc');
+}
+
+// ─── NOTES FLASHCARD ──────────────────────────────────────────────────────────
+let currentCard = null;
+
+function newCard() {
+  buildPool(); // rebuild weighted pool on every new question
+  if (!pool.length) return;
+  currentCard = randomFrom(pool);
+  document.getElementById('fc-card').classList.remove('reveal');
+  document.getElementById('fc-position').textContent = 'S' + (currentCard.s + 1) + '  F' + currentCard.f;
+  document.getElementById('fc-answer').textContent   = '';
+  clearFeedback('fc');
+  if (document.getElementById('cfg-mc').checked) buildFcGrid();
+  else {
+    const wrap = document.getElementById('answer-grid');
+    wrap.innerHTML = '<button class="btn" onclick="revealCard()" style="width:100%;margin-top:4px">Reveal</button>';
+  }
+  playTone(noteHz(currentCard.s, currentCard.f));
+}
+
+function buildFcGrid() {
+  const correctRaw = noteAt(currentCard.s, currentCard.f);
+  buildKeyOrderedGrid('answer-grid', correctRaw, (chosen, correct, btn, wrap) => {
+    checkFcAnswer(chosen, correct, btn, wrap);
+  });
+}
+
+function checkFcAnswer(chosen, correct, btn, wrap) {
+  fcTotal++;
+  const hit = chosen === correct;
+  srRecord(currentCard.s, currentCard.f, hit);
+  if (hit) {
+    fcCorrect++; fcDots.push(true);
+    btn.classList.add('correct');
+    setFeedback('fc', 'Correct', false);
+    setTimeout(newCard, 600);
+  } else {
+    fcDots.push(false);
+    btn.classList.add('wrong');
+    wrap.querySelectorAll('.answer-btn').forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
+    setFeedback('fc', 'Wrong \u2014 ' + correct, true);
+    setTimeout(newCard, 1200);
   }
   updateStats('fc');
 }
 
 function revealCard() {
   document.getElementById('fc-card').classList.add('reveal');
-  document.getElementById('fc-answer').textContent = displayNote(currentCard.s, currentCard.f);
-  document.getElementById('answer-grid').innerHTML = `<button class="btn" onclick="newCard()" style="grid-column:span 4">Next →</button>`;
+  document.getElementById('fc-answer').textContent = displayLabel(currentCard.s, currentCard.f);
+  document.getElementById('answer-grid').innerHTML =
+    '<button class="btn" onclick="newCard()" style="width:100%;margin-top:4px">Next \u2192</button>';
 }
 
 function skipCard() { fcDots.push(null); updateStats('fc'); newCard(); }
 
-// ─── NECK FLASHCARD ───────────────────────────────────────────────────────────
-function newNfcCard() {
-  if (!nfcPool.length) return;
-  nfcCard = randomFrom(nfcPool);
-  clearFeedback('nfc');
-  buildNfcGrid();
-  drawNfcNeck(false);
-}
-
-function drawNfcNeck(revealed) {
-  const canvas = document.getElementById('nfc-canvas');
-  drawNeck(canvas, [{s:nfcCard.s, f:nfcCard.f, color:revealed?'#7fbfb0':'#c8a84b', label:revealed?displayNote(nfcCard.s,nfcCard.f):'?'}], false, null);
-}
-
-function buildNfcGrid() {
-  const correct = displayNote(nfcCard.s, nfcCard.f);
-  const opts = new Set([correct]);
-  while (opts.size < 8) opts.add(randomFrom(ALL_DISPLAY_NOTES));
-  const grid = document.getElementById('nfc-answer-grid');
-  grid.innerHTML = '';
-  [...opts].sort(()=>Math.random()-.5).forEach(n => {
-    const b = document.createElement('button');
-    b.className = 'answer-btn'; b.textContent = n;
-    b.onclick = () => checkNfcAnswer(n, b);
-    grid.appendChild(b);
-  });
-}
-
-function checkNfcAnswer(chosen, btn) {
-  const correct = displayNote(nfcCard.s, nfcCard.f);
-  nfcTotal++;
-  if (chosen === correct) {
-    nfcCorrect++; btn.classList.add('correct'); nfcDots.push(true);
-    setFeedback('nfc','Correct',false); drawNfcNeck(true); setTimeout(newNfcCard,700);
-  } else {
-    btn.classList.add('wrong');
-    document.querySelectorAll('#nfc-answer-grid .answer-btn').forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});
-    nfcDots.push(false); setFeedback('nfc','Wrong — '+correct,true); drawNfcNeck(true); setTimeout(newNfcCard,1300);
-  }
-  updateStats('nfc');
-}
-
-function nfcSkip() { nfcDots.push(null); updateStats('nfc'); newNfcCard(); }
-
-// ─── THEORY DRILL (note spelling) ─────────────────────────────────────────────
+// ─── THEORY ───────────────────────────────────────────────────────────────────
 const ALL_TRIADS_THEORY = [
   {name:'C',   type:'Major', notes:['C','E','G']},
   {name:'G',   type:'Major', notes:['G','B','D']},
@@ -606,32 +897,27 @@ const ALL_TRIADS_THEORY = [
   {name:'Bbm', type:'Minor', notes:['A#','C#','F']},
 ];
 
-let thCard = null, thSelected = new Set();
-let thCorrect = 0, thTotal = 0, thDots = [];
-let thAnswered = false;
+let thCard = null, thSelected = new Set(), thAnswered = false;
 
 function newTheoryCard() {
   thCard = randomFrom(ALL_TRIADS_THEORY);
-  thSelected = new Set();
-  thAnswered = false;
-  document.getElementById('th-name').textContent = thCard.name;
-  document.getElementById('th-type').textContent = thCard.type;
+  thSelected = new Set(); thAnswered = false;
+  document.getElementById('th-name').textContent  = thCard.name;
+  document.getElementById('th-type').textContent  = thCard.type;
   document.getElementById('th-reveal').textContent = '';
   document.getElementById('th-reveal').classList.remove('show');
   clearFeedback('th');
-  document.getElementById('th-submit').disabled = true;
+  const sub = document.getElementById('th-submit');
+  sub.textContent = 'Check'; sub.disabled = true; sub.onclick = submitTheory;
   buildTheoryGrid();
 }
 
 function buildTheoryGrid() {
-  // Show all 12 note names shuffled
   const grid = document.getElementById('th-note-grid');
   grid.innerHTML = '';
-  const shuffled = [...ALL_DISPLAY_NOTES].sort(()=>Math.random()-.5);
-  shuffled.forEach(n => {
+  [...ALL_NOTES].sort(() => Math.random() - 0.5).forEach(n => {
     const b = document.createElement('button');
-    b.className = 'note-select-btn'; b.textContent = n;
-    b.dataset.note = n;
+    b.className = 'note-select-btn'; b.textContent = n; b.dataset.note = n;
     b.onclick = () => toggleTheoryNote(n, b);
     grid.appendChild(b);
   });
@@ -639,57 +925,31 @@ function buildTheoryGrid() {
 
 function toggleTheoryNote(n, btn) {
   if (thAnswered) return;
-  if (thSelected.has(n)) {
-    thSelected.delete(n);
-    btn.classList.remove('selected');
-  } else if (thSelected.size < 3) {
-    thSelected.add(n);
-    btn.classList.add('selected');
-  }
+  if (thSelected.has(n)) { thSelected.delete(n); btn.classList.remove('selected'); }
+  else if (thSelected.size < 3) { thSelected.add(n); btn.classList.add('selected'); }
   document.getElementById('th-submit').disabled = thSelected.size !== 3;
 }
 
 function submitTheory() {
   if (thAnswered) return;
-  thAnswered = true;
-  thTotal++;
-
-  // Normalize: map internal note names to display
-  const correctDisplay = thCard.notes.map(noteName);
-  const chosen = [...thSelected];
-
-  const allCorrect = correctDisplay.every(n => chosen.includes(n)) && chosen.every(n => correctDisplay.includes(n));
-
+  thAnswered = true; thTotal++;
+  const correct  = thCard.notes.map(n => noteName(n));
+  const chosen   = [...thSelected];
+  const allRight = correct.every(n => chosen.includes(n)) && chosen.every(n => correct.includes(n));
   document.querySelectorAll('.note-select-btn').forEach(b => {
-    const n = b.dataset.note;
-    const inCorrect = correctDisplay.includes(n);
-    const inChosen = thSelected.has(n);
-    if (inCorrect) b.classList.add('correct-note');
-    else if (inChosen) b.classList.add('wrong-note');
+    if (correct.includes(b.dataset.note))    b.classList.add('correct-note');
+    else if (thSelected.has(b.dataset.note)) b.classList.add('wrong-note');
   });
-
-  if (allCorrect) {
-    thCorrect++; thDots.push(true);
-    setFeedback('th','Correct!',false);
-  } else {
-    thDots.push(false);
-    setFeedback('th','Wrong — '+correctDisplay.join(' · '),true);
-  }
-
-  document.getElementById('th-reveal').textContent = correctDisplay.join('  ·  ');
+  if (allRight) { thCorrect++; thDots.push(true); setFeedback('th', 'Correct!', false); }
+  else          { thDots.push(false); setFeedback('th', 'Wrong \u2014 ' + correct.join(' \u00b7 '), true); }
+  document.getElementById('th-reveal').textContent = correct.join('  \u00b7  ');
   document.getElementById('th-reveal').classList.add('show');
-  document.getElementById('th-submit').textContent = 'Next →';
-  document.getElementById('th-submit').disabled = false;
-  document.getElementById('th-submit').onclick = () => {
-    document.getElementById('th-submit').textContent = 'Check';
-    document.getElementById('th-submit').onclick = submitTheory;
-    newTheoryCard();
-  };
-
+  const sub = document.getElementById('th-submit');
+  sub.textContent = 'Next \u2192'; sub.disabled = false; sub.onclick = newTheoryCard;
   updateStats('th');
 }
 
-// ─── TRIADS — SAME-FRET ───────────────────────────────────────────────────────
+// ─── TRIADS ───────────────────────────────────────────────────────────────────
 const ALL_TRIADS_NECK = [
   {name:'C',   type:'Major', notes:['C','E','G']},
   {name:'G',   type:'Major', notes:['G','B','D']},
@@ -709,236 +969,138 @@ const ALL_TRIADS_NECK = [
   {name:'Gm',  type:'Minor', notes:['G','A#','D']},
 ];
 
-const VALID_TRIADS = (function() {
-  return ALL_TRIADS_NECK.map(triad => {
-    const validFrets = [];
-    for (let f=0;f<=12;f++) {
-      const present = new Set();
-      for (let s=0;s<10;s++) present.add(noteAt(s,f));
-      if (triad.notes.every(n=>present.has(n))) validFrets.push(f);
-    }
-    return validFrets.length ? {...triad, validFrets} : null;
-  }).filter(Boolean);
-})();
+const VALID_TRIADS = ALL_TRIADS_NECK.map(triad => {
+  const validFrets = [];
+  for (let f = 0; f <= 12; f++) {
+    const present = new Set(Array.from({length:10}, (_, s) => noteAt(s, f)));
+    if (triad.notes.every(n => present.has(n))) validFrets.push(f);
+  }
+  return validFrets.length ? {...triad, validFrets} : null;
+}).filter(Boolean);
 
 let currentTriad=null, triadTargetFret=null, triadFound=[], triadMissed=0, triadRevealed=false;
 
 function newTriad() {
-  if (!VALID_TRIADS.length) return;
-  currentTriad = randomFrom(VALID_TRIADS);
+  currentTriad    = randomFrom(VALID_TRIADS);
   triadTargetFret = randomFrom(currentTriad.validFrets);
   triadFound=[]; triadMissed=0; triadRevealed=false;
-  document.getElementById('tr-name').textContent = currentTriad.name;
-  document.getElementById('tr-type').textContent = currentTriad.type+' — '+currentTriad.notes.map(noteName).join(' · ');
-  document.getElementById('tr-fret').textContent = triadTargetFret===0?'Open':triadTargetFret;
-  document.getElementById('tr-found').textContent='0';
-  document.getElementById('tr-missed').textContent='0';
+  document.getElementById('tr-name').textContent   = currentTriad.name;
+  document.getElementById('tr-type').textContent   = currentTriad.type + ' \u2014 ' + currentTriad.notes.map(noteName).join(' \u00b7 ');
+  document.getElementById('tr-fret').textContent   = triadTargetFret === 0 ? 'Open' : triadTargetFret;
+  document.getElementById('tr-found').textContent  = '0';
+  document.getElementById('tr-missed').textContent = '0';
   clearFeedback('tr');
   buildTriadChips();
   drawTriadNeck(false);
 }
 
 function buildTriadChips() {
-  document.getElementById('tr-note-chips').innerHTML = currentTriad.notes.map(n =>
-    `<div class="note-chip" id="chip-${n.replace('#','s')}">${noteName(n)}</div>`).join('');
+  document.getElementById('tr-note-chips').innerHTML =
+    currentTriad.notes.map(n => '<div class="note-chip" id="chip-' + n.replace('#','s') + '">' + noteName(n) + '</div>').join('');
 }
 
 function getTargetPositions() {
-  const pos=[];
-  for (let s=0;s<10;s++) { const n=noteAt(s,triadTargetFret); if(currentTriad.notes.includes(n)) pos.push({s,f:triadTargetFret,n}); }
+  const pos = [];
+  for (let s = 0; s < 10; s++) {
+    const n = noteAt(s, triadTargetFret);
+    if (currentTriad.notes.includes(n)) pos.push({s, f:triadTargetFret, n});
+  }
   return pos;
 }
 
-function revealTriad() { triadRevealed=true; drawTriadNeck(true); }
+function revealTriad() { triadRevealed = true; drawTriadNeck(true); }
 
 function drawTriadNeck(reveal) {
-  const canvas=document.getElementById('triad-canvas');
+  const canvas = document.getElementById('triad-canvas');
   if (!currentTriad) return;
-  const allPos=getTargetPositions();
-  const highlights=[];
-  if (reveal) {
-    allPos.forEach(p=>highlights.push({s:p.s,f:p.f,label:noteName(p.n),color:triadFound.some(x=>x.s===p.s&&x.f===p.f)?'#7fbfb0':'#c8a84b'}));
-  } else {
-    triadFound.forEach(p=>highlights.push({s:p.s,f:p.f,label:noteName(p.n),color:'#7fbfb0'}));
-  }
-  drawNeck(canvas, highlights, !reveal, (s,f)=>{
+  const allPos     = getTargetPositions();
+  const highlights = [];
+  if (reveal) allPos.forEach(p => highlights.push({s:p.s, f:p.f, label:noteName(p.n), color:triadFound.some(x=>x.s===p.s&&x.f===p.f)?'#7fbfb0':'#c8a84b'}));
+  else        triadFound.forEach(p => highlights.push({s:p.s, f:p.f, label:noteName(p.n), color:'#7fbfb0'}));
+  drawNeck(canvas, highlights, !reveal, (s, f) => {
     if (triadRevealed) return;
-    if (f!==triadTargetFret) { setFeedback('tr','Stay on fret '+(triadTargetFret===0?'open':triadTargetFret),true); return; }
-    const n=noteAt(s,f);
+    if (f !== triadTargetFret) { setFeedback('tr', 'Stay on fret ' + (triadTargetFret===0?'open':triadTargetFret), true); return; }
+    const n = noteAt(s, f);
     if (!currentTriad.notes.includes(n)) {
-      triadMissed++; document.getElementById('tr-missed').textContent=triadMissed;
-      setFeedback('tr',noteName(n)+' — not in triad',true); return;
+      triadMissed++;
+      document.getElementById('tr-missed').textContent = triadMissed;
+      setFeedback('tr', noteName(n) + ' \u2014 not in triad', true); return;
     }
-    if (triadFound.some(x=>x.s===s&&x.f===f)) return;
-    triadFound.push({s,f,n});
-    document.getElementById('tr-found').textContent=triadFound.length;
-    setFeedback('tr','✓ '+noteName(n),false);
-    const chip=document.getElementById('chip-'+n.replace('#','s'));
+    if (triadFound.some(x => x.s===s && x.f===f)) return;
+    triadFound.push({s, f, n});
+    document.getElementById('tr-found').textContent = triadFound.length;
+    setFeedback('tr', '\u2713 ' + noteName(n), false);
+    const chip = document.getElementById('chip-' + n.replace('#','s'));
     if (chip) chip.classList.add('found');
     drawTriadNeck(false);
-    if (triadFound.length===allPos.length) { setFeedback('tr','✓ Complete!',false); setTimeout(newTriad,1400); }
-  });
+    if (triadFound.length === allPos.length) { setFeedback('tr', '\u2713 Complete!', false); setTimeout(newTriad, 1400); }
+  }, {min:0, max:12});
 }
 
-// ─── TRIAD REFERENCE ─────────────────────────────────────────────────────────
-let refFilter='all';
+let refFilter = 'all';
 function setRefFilter(f) {
-  refFilter=f;
-  document.querySelectorAll('#triad-ref-filter button').forEach((b,i)=>b.classList.toggle('active',['all','Major','Minor'][i]===f));
+  refFilter = f;
+  document.querySelectorAll('#triad-ref-filter button').forEach((b, i) =>
+    b.classList.toggle('active', ['all','Major','Minor'][i] === f));
   buildTriadRef();
 }
 function buildTriadRef() {
-  const rows=VALID_TRIADS.filter(t=>refFilter==='all'||t.type===refFilter);
-  document.getElementById('triad-ref-body').innerHTML=rows.map(t=>`
-    <div class="triad-ref-row">
-      <div class="triad-ref-name">${t.name}</div>
-      <div class="triad-ref-notes">${t.notes.map(noteName).join(' · ')}</div>
-      <div class="triad-ref-frets">${t.validFrets.map(f=>f===0?'open':f).join(', ')}</div>
-    </div>`).join('');
+  document.getElementById('triad-ref-body').innerHTML =
+    VALID_TRIADS.filter(t => refFilter === 'all' || t.type === refFilter).map(t =>
+      '<div class="triad-ref-row">' +
+        '<div class="triad-ref-name">' + t.name + '</div>' +
+        '<div class="triad-ref-notes">' + t.notes.map(noteName).join(' \u00b7 ') + '</div>' +
+        '<div class="triad-ref-frets">' + t.validFrets.map(f => f===0?'open':f).join(', ') + '</div>' +
+      '</div>').join('');
 }
 
-let triadMode='drill';
+let triadMode = 'drill';
 function setTriadMode(mode) {
-  triadMode=mode;
-  document.querySelectorAll('#triad-mode-toggle button').forEach((b,i)=>b.classList.toggle('active',['drill','ref'][i]===mode));
-  document.getElementById('triad-drill-view').style.display=mode==='drill'?'flex':'none';
-  document.getElementById('triad-ref-view').style.display=mode==='ref'?'flex':'none';
-  if (mode==='ref') buildTriadRef();
-  if (mode==='drill'&&currentTriad) setTimeout(()=>drawTriadNeck(triadRevealed),50);
+  triadMode = mode;
+  document.querySelectorAll('#triad-mode-toggle button').forEach((b, i) =>
+    b.classList.toggle('active', ['drill','ref'][i] === mode));
+  document.getElementById('triad-drill-view').style.display = mode==='drill' ? 'flex' : 'none';
+  document.getElementById('triad-ref-view').style.display   = mode==='ref'   ? 'flex' : 'none';
+  if (mode === 'ref')   buildTriadRef();
+  if (mode === 'drill' && currentTriad) setTimeout(() => drawTriadNeck(triadRevealed), 50);
 }
 
-// ─── STATS / FEEDBACK ─────────────────────────────────────────────────────────
-function setFeedback(prefix, msg, wrong) {
-  const el=document.getElementById(prefix+'-feedback');
-  el.textContent=msg; el.className='feedback'+(wrong?' wrong':'');
-}
-function clearFeedback(prefix) { setFeedback(prefix,'',false); }
-function streak(dots) { let s=0; for(let i=dots.length-1;i>=0;i--){if(dots[i]===true)s++;else break;} return s; }
-
-function updateStats(prefix) {
-  const map={fc:[fcCorrect,fcTotal,fcDots,'streak-dots'],nfc:[nfcCorrect,nfcTotal,nfcDots,'nfc-streak-dots'],th:[thCorrect,thTotal,thDots,'th-streak-dots']};
-  const [correct,total,dots,dotId]=map[prefix];
-  document.getElementById(prefix+'-correct').textContent=correct;
-  document.getElementById(prefix+'-streak').textContent=streak(dots);
-  document.getElementById(prefix+'-pct').textContent=total?Math.round(100*correct/total)+'%':'—';
-  document.getElementById(dotId).innerHTML=dots.slice(-12).map(d=>`<div class="streak-dot ${d===true?'hit':d===false?'miss':''}"></div>`).join('');
-}
-
-function resetStats() {
-  fcCorrect=0;fcTotal=0;fcDots=[];
-  nfcCorrect=0;nfcTotal=0;nfcDots=[];
-  thCorrect=0;thTotal=0;thDots=[];
-  updateStats('fc');updateStats('nfc');updateStats('th');
-}
-
-// ─── NECK DRAWING ─────────────────────────────────────────────────────────────
-const FRETS_SHOW=13, STRING_COUNT=10;
-
-function getNeckDims(canvas) {
-  const W=canvas.parentElement.offsetWidth||340;
-  const COL_W=Math.max(26,Math.floor((W-36)/FRETS_SHOW));
-  const ROW_H=26, LEFT_PAD=28, TOP_PAD=26, BOTTOM_PAD=10;
-  canvas.width=LEFT_PAD+FRETS_SHOW*COL_W+6;
-  canvas.height=TOP_PAD+STRING_COUNT*ROW_H+BOTTOM_PAD;
-  return {W:canvas.width,H:canvas.height,COL_W,ROW_H,LEFT_PAD,TOP_PAD};
-}
-
-function drawNeck(canvas, highlights, interactive, onTap) {
-  const ctx=canvas.getContext('2d');
-  const {W,H,COL_W,ROW_H,LEFT_PAD,TOP_PAD}=getNeckDims(canvas);
-  ctx.clearRect(0,0,W,H); ctx.fillStyle='#111'; ctx.fillRect(0,0,W,H);
-
-  // Draw colored fret column backgrounds first
-  for (const [fStr, color] of Object.entries(FRET_COLORS)) {
-    const f=parseInt(fStr);
-    const x=LEFT_PAD+f*COL_W;
-    ctx.fillStyle=color+'22'; // subtle tint
-    ctx.fillRect(x, TOP_PAD-8, COL_W, STRING_COUNT*ROW_H+8);
-  }
-
-  // Fret number labels
-  for (let f=0;f<=12;f++) {
-    const x=LEFT_PAD+f*COL_W+COL_W/2;
-    const col=FRET_COLORS[f];
-    if (col) {
-      // colored label
-      ctx.fillStyle=col;
-      ctx.font='bold 9px IBM Plex Mono';
-    } else {
-      ctx.fillStyle=(f===12)?'#888':'#3a3a3a';
-      ctx.font='9px IBM Plex Mono';
-    }
-    ctx.textAlign='center';
-    ctx.fillText(f===0?'O':f, x, 16);
-  }
-
-  for (let s=0;s<STRING_COUNT;s++) {
-    const y=TOP_PAD+s*ROW_H+ROW_H/2;
-    ctx.strokeStyle='#252525'; ctx.lineWidth=1+(s>6?.4:0);
-    ctx.beginPath(); ctx.moveTo(LEFT_PAD,y); ctx.lineTo(W-4,y); ctx.stroke();
-    ctx.fillStyle='#3a3a3a'; ctx.font='9px IBM Plex Mono'; ctx.textAlign='right';
-    ctx.fillText('S'+(s+1), LEFT_PAD-4, y+3);
-  }
-
-  for (let f=0;f<=12;f++) {
-    const x=LEFT_PAD+f*COL_W;
-    const col=FRET_COLORS[f];
-    ctx.strokeStyle=col?col+'88':f===0?'#555':'#1e1e1e';
-    ctx.lineWidth=col||f===0?2:1;
-    ctx.beginPath(); ctx.moveTo(x,TOP_PAD-4); ctx.lineTo(x,TOP_PAD+STRING_COUNT*ROW_H-4); ctx.stroke();
-  }
-
-  if (highlights) highlights.forEach(h => {
-    const x=LEFT_PAD+h.f*COL_W+COL_W/2, y=TOP_PAD+h.s*ROW_H+ROW_H/2;
-    ctx.beginPath(); ctx.arc(x,y,9,0,Math.PI*2); ctx.fillStyle=h.color||'#c8a84b'; ctx.fill();
-    if (h.label) { ctx.fillStyle='#000'; ctx.font='bold 8px IBM Plex Mono'; ctx.textAlign='center'; ctx.fillText(h.label,x,y+3); }
-  });
-
-  canvas.ontouchstart=null; canvas.onclick=null;
-  if (interactive && onTap) {
-    const handler=(e)=>{
-      e.preventDefault();
-      const rect=canvas.getBoundingClientRect();
-      const px=(e.touches?e.touches[0].clientX:e.clientX)-rect.left;
-      const py=(e.touches?e.touches[0].clientY:e.clientY)-rect.top;
-      const f=Math.round((px*(canvas.width/rect.width)-LEFT_PAD)/COL_W);
-      const s=Math.round((py*(canvas.height/rect.height)-TOP_PAD)/ROW_H);
-      if (f>=0&&f<=12&&s>=0&&s<10) onTap(s,f);
-    };
-    canvas.ontouchstart=handler; canvas.onclick=handler;
-  }
-}
-
+// ─── REF NECK ─────────────────────────────────────────────────────────────────
 function drawRefNeck(hl) {
-  const canvas=document.getElementById('ref-canvas');
-  drawNeck(canvas, hl||null, true, (s,f)=>{
-    const n=displayNote(s,f);
-    document.getElementById('ref-note').textContent=n;
-    document.querySelector('#ref-info .card-label').textContent=`String ${s+1}  ·  Fret ${f}`;
-    drawRefNeck([{s,f,label:n,color:'#c8a84b'}]);
-  });
+  const canvas = document.getElementById('ref-canvas');
+  const range  = getFretRange();
+  drawNeck(canvas, hl || null, true, (s, f) => {
+    const label   = displayLabel(s, f);
+    const noteLbl = noteName(noteAt(s, f));
+    const extra   = displayMode !== 'notes' ? '  \u2014  ' + noteLbl : '';
+    document.getElementById('ref-note').textContent  = label;
+    document.getElementById('ref-label').textContent = 'String ' + (s+1) + '  \u00b7  Fret ' + f + extra;
+    playTone(noteHz(s, f));
+    drawRefNeck([{s, f, label, color:'#c8a84b'}]);
+  }, range);
 }
 
 // ─── TABS ─────────────────────────────────────────────────────────────────────
-const TAB_NAMES=['neckfc','triad','theory','neck','config','flashcard'];
+const TAB_NAMES = ['neckfc','triad','theory','ref','notes'];
 
 function switchTab(name) {
-  TAB_NAMES.forEach((t,i)=>document.querySelectorAll('.tab')[i].classList.toggle('active',t===name));
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+name).classList.add('active');
-  if (name==='neck') setTimeout(drawRefNeck,50);
-  if (name==='neckfc') setTimeout(()=>{ if(!nfcPool.length) buildNfcPool(); else drawNfcNeck(false); },50);
-  if (name==='triad') {
-    if (!currentTriad) newTriad();
-    else if (triadMode==='drill') setTimeout(()=>drawTriadNeck(triadRevealed),50);
-  }
-  if (name==='theory' && !thCard) newTheoryCard();
+  activeTab = name;
+  document.querySelectorAll('.tab').forEach((el, i) =>
+    el.classList.toggle('active', TAB_NAMES[i] === name));
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  if (name === 'ref')    setTimeout(drawRefNeck, 50);
+  if (name === 'triad')  { if (!currentTriad) newTriad(); else if (triadMode==='drill') setTimeout(() => drawTriadNeck(triadRevealed), 50); }
+  if (name === 'theory') { if (!thCard) newTheoryCard(); }
+  if (name === 'neckfc') setTimeout(() => { if (nfcCard) drawNfcNeck(false); }, 50);
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
-buildZoneUI();
+setSRMode('standard');
 buildPool();
 buildNfcPool();
+newNfcCard();
+newCard();
 newTheoryCard();
 updateStats('fc');
 updateStats('nfc');
